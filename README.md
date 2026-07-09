@@ -61,3 +61,13 @@ streamlit run app.py
 Never commit your .env file or your API keys to GitHub. This repository includes a .gitignore file to ensure these secrets remain on your local machine. If you are deploying your own version to Streamlit Community Cloud, add your API keys via the "Advanced Settings > Secrets" menu in the Streamlit deployment dashboard.
 
 *Built with Python, Streamlit, and the Google Gemini API.*
+
+
+## 📄 License
+This project is licensed under the MIT License.
+
+---
+
+## 🤝 Let's Connect
+Created by **Kislay Anand**
+* **LinkedIn:** [www.linkedin.com/in/kislay-anand-aa926332a]
