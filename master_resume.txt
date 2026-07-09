@@ -1,0 +1,60 @@
+Name: [Your Full Name]
+Email: [your.email@example.com]
+Phone: [+91-XXXXXXXXXX]
+LinkedIn: [linkedin.com/in/yourprofile]
+GitHub/Portfolio: [github.com/yourusername]
+
+------------------------------------------------------------
+Education
+------------------------------------------------------------
+B.Tech in Computer Science and Engineering
+IIMT College of Engineering, Greater Noida
+Expected Graduation: [Month, Year]
+Relevant Coursework: Data Structures, Algorithms, Machine Learning, Cloud Computing
+
+------------------------------------------------------------
+Skills
+------------------------------------------------------------
+Programming: Python, Java, C++, JavaScript
+Frameworks/Tools: TensorFlow, PyTorch, React, Node.js, Salesforce, Unity/C#
+Databases: MySQL, MongoDB
+Other: Competitive Programming (LeetCode, SPOJ), Cloud Infrastructure (Google Cloud, Azure)
+
+------------------------------------------------------------
+Projects
+------------------------------------------------------------
+Resume Tailor AI Agent
+- Built an AI-powered agent to tailor resumes to job descriptions using Gemini/OpenAI APIs.
+- Implemented semantic search with embeddings for job–resume matching.
+- Automated keyword insertion and professional phrasing.
+
+Dynamic Unity Game
+- Developed a Unity/C# game with adaptive win conditions and dynamic spawning.
+- Enhanced user experience with polished UI/UX and responsive controls.
+
+Data 360 Workflow Automation
+- Designed workflows integrating Salesforce/Agentforce with cloud resources.
+- Automated reporting and improved efficiency for academic club documentation.
+
+------------------------------------------------------------
+Experience
+------------------------------------------------------------
+Intern – Coding Blocks / CBSOT
+- Worked on AI-driven solutions and technical community building.
+- Assisted in developing machine learning models and full-stack applications.
+
+Club Leadership – Technical Club
+- Organized coding workshops, technical quizzes, and recognition ceremonies.
+- Compiled professional event documentation and formatted official club magazine.
+
+------------------------------------------------------------
+Achievements
+------------------------------------------------------------
+- Solved 500+ problems on LeetCode/SPOJ.
+- Published technical documentation and research papers in IEEE format.
+- Recognized for academic rigor and peer mentoring in competitive programming.
+
+------------------------------------------------------------
+References
+------------------------------------------------------------
+Available upon request
