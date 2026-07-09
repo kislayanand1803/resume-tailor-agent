@@ -29,5 +29,28 @@ If you want to run this agent on your own machine instead of using the live web 
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_USERNAME/resume-tailor-agent.git](https://github.com/YOUR_USERNAME/resume-tailor-agent.git)
+git clone [https://github.com/kislayanand1803/resume-tailor-agent.git](https://github.com/kislayanand1803/resume-tailor-agent.git)
 cd resume-tailor-agent
+```
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+### 3. Configure API Key
+Create a .env file in the root directory of the project and add your Google AI Studio API key:
+```bash
+GOOGLE_GEMINI_API_KEY=your_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+```
+### 4. Run the Application
+Launch the Streamlit web interface:
+```bash
+streamlit run app.py
+```
+
+---
+
+## ⚠️ Security Warning
+Never commit your .env file or your API keys to GitHub. This repository includes a .gitignore file to ensure these secrets remain on your local machine. If you are deploying your own version to Streamlit Community Cloud, add your API keys via the "Advanced Settings > Secrets" menu in the Streamlit deployment dashboard.
+
+*Built with Python, Streamlit, and the Google Gemini API.*
