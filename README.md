@@ -15,6 +15,13 @@ Applying to jobs requires highly tailored resumes to pass Applicant Tracking Sys
 *   **Keyword Optimization:** Uses advanced LLMs to identify the core skills that ATS software looks for.
 *   **Data-Driven:** Extracts structured job data (skills, experience, responsibilities) before writing, ensuring your resume stays factual and relevant.
 
+## 🧰 Tech Stack
+* **Language:** Python 3.x
+* **Framework:** Streamlit (Web UI)
+* **AI/LLM:** Google GenAI SDK (Gemini 2.5 Flash)
+* **Data Validation:** Pydantic
+* **Web Scraping:** Requests & BeautifulSoup4
+
 ## 🛠 How It Works
 The agent functions in three automated stages:
 1.  **Scraping:** It navigates to the provided job URL and extracts the raw text content from the webpage.
