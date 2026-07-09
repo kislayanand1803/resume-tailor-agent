@@ -4,7 +4,7 @@ An autonomous resume tailoring agent built with Python, Google Gemini (2.5 Flash
 
 ## 🌐 Live Demo
 **[👉 Click here to launch the AI Resume Tailor](https://sugoi-resume-tailor-agent.streamlit.app/)**
-
+![App Screenshot](Screenshot.png)
 ---
 
 ## 🚀 Purpose & Benefits
