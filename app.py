@@ -38,20 +38,28 @@ def generate_tailored_resume(master_resume_text: str, job_requirements: JobRequi
     return response.text or "Error: The AI failed to generate a response."
 
 def generate_cover_letter(master_resume_text: str, job_requirements: JobRequirements) -> str:
-    """Writes a highly targeted cover letter based on the master resume and job requirements."""
+    """Writes a highly targeted cover letter using a strict professional template."""
     prompt = f"""
     You are an expert career coach. Write a persuasive, professional cover letter 
     for the following job, using my Master Resume as the foundation.
     
-    - Keep it to 3 or 4 paragraphs.
-    - Highlight specific achievements from my resume that match their core skills.
-    - Do not invent any fake experience or metrics.
-    - Output in clean Markdown format.
+    You MUST adhere strictly to the following structural template, keeping the letter to one page:
+    
+    1. Header: [My Name | Address | Phone | Email]
+    2. Recipient: [Company Name | Address | Contact Person if known]
+    3. Regarding: [Specific Job Title] - [Current Date]
+    4. Headline: A catchy, 1-sentence headline containing relevant experience or unique selling points.
+    5. Motivation (5-7 lines): Be detailed and honest about why I am excited about the specific tasks and the company.
+    6. Professional Qualifications: Present my relevant study programs, knowledge (subjects/projects), and link them directly to the specific tasks in the job ad. Use specific examples.
+    7. Personality: Present key personal competencies relevant to what the company asks for, showing brief examples (e.g., "team player from 3 years of competitive sports").
+    8. Closing (3-4 lines): Confidently pave the way for an interview. Do NOT use passive phrases like "I hope to hear from you."
+    9. Sign-off: "Kind regards,\n[My Name]"
 
     --- JOB REQUIREMENTS ---
     Company: {job_requirements.company_name}
     Title: {job_requirements.job_title}
     Core Skills: {', '.join(job_requirements.core_skills)}
+    Key Responsibilities: {', '.join(job_requirements.key_responsibilities)}
 
     --- MY MASTER RESUME ---
     {master_resume_text}
@@ -59,7 +67,6 @@ def generate_cover_letter(master_resume_text: str, job_requirements: JobRequirem
     
     response = client.models.generate_content(model=model_name, contents=prompt)
     return response.text or "Error: The AI failed to generate a cover letter."
-
 
 # --- STREAMLIT USER INTERFACE ---
 
