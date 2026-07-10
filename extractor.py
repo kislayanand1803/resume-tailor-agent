@@ -35,7 +35,7 @@ def extract_requirements(raw_text: str) -> JobRequirements:
     print("Gemini is reading and extracting requirements...")
     
     # Grab the model name from your .env file
-    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = os.getenv("GEMINI_EXTRACTOR_MODEL", "gemini-3.1-flash-lite")
     
     # We combine the instructions and the raw text for Gemini
     prompt = f"You are an expert technical recruiter. Extract the exact job requirements from the provided raw website text. Ignore cookie policies, navigation links, and irrelevant noise.\n\nRaw Text:\n{raw_text}"
