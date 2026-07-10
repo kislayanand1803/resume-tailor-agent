@@ -8,7 +8,7 @@ GitHub/Portfolio: [github.com/yourusername]
 Education
 ------------------------------------------------------------
 B.Tech in Computer Science and Engineering
-IIMT College of Engineering, Greater Noida
+College Name, City
 Expected Graduation: [Month, Year]
 Relevant Coursework: Data Structures, Algorithms, Machine Learning, Cloud Computing
 
@@ -39,11 +39,11 @@ Data 360 Workflow Automation
 ------------------------------------------------------------
 Experience
 ------------------------------------------------------------
-Intern – Coding Blocks / CBSOT
+Intern – Company Name
 - Worked on AI-driven solutions and technical community building.
 - Assisted in developing machine learning models and full-stack applications.
 
-Club Leadership – Technical Club
+Club Leadership – Club Name
 - Organized coding workshops, technical quizzes, and recognition ceremonies.
 - Compiled professional event documentation and formatted official club magazine.
 
