@@ -1,3 +1,5 @@
+from docx import Document
+import io
 import os
 import streamlit as st
 from dotenv import load_dotenv
@@ -68,6 +70,19 @@ def generate_cover_letter(master_resume_text: str, job_requirements: JobRequirem
     response = client.models.generate_content(model=model_name, contents=prompt)
     return response.text or "Error: The AI failed to generate a cover letter."
 
+def create_docx(text: str) -> io.BytesIO:
+    """Converts raw text into a downloadable Word Document."""
+    doc = Document()
+    
+    # Split the text by lines and add them as paragraphs
+    for line in text.split('\n'):
+        doc.add_paragraph(line)
+        
+    # Save the document to a virtual memory file (BytesIO) instead of the hard drive
+    bio = io.BytesIO()
+    doc.save(bio)
+    return bio
+    
 # --- STREAMLIT USER INTERFACE ---
 
 # 1. Page Setup
@@ -162,9 +177,14 @@ if st.button("Tailor My Application", type="primary"):
         
     with tab2:
         st.markdown(final_cover_letter)
+        
+        # Convert the markdown text to a Word Document
+        docx_file = create_docx(final_cover_letter)
+        
+        # Docx Download Button
         st.download_button(
-            label="Download Cover Letter (.md)",
-            data=final_cover_letter,
-            file_name=f"Cover_Letter_{clean_requirements.company_name.replace(' ', '_')}.md",
-            mime="text/markdown"
+            label="📥 Download Cover Letter (.docx)",
+            data=docx_file.getvalue(),
+            file_name=f"Cover_Letter_{clean_requirements.company_name.replace(' ', '_')}.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
