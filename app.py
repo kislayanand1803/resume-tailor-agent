@@ -12,6 +12,7 @@ load_dotenv(override=True)
 client = genai.Client(api_key=os.getenv("GOOGLE_GEMINI_API_KEY"))
 model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
+# --- CORE FUNCTIONS ---
 def generate_tailored_resume(master_resume_text: str, job_requirements: JobRequirements) -> str:
     """Takes your master resume and the job requirements, and rewrites it."""
     prompt = f"""
@@ -34,26 +35,23 @@ def generate_tailored_resume(master_resume_text: str, job_requirements: JobRequi
     """
     
     response = client.models.generate_content(model=model_name, contents=prompt)
-    return response.text or "Error: The AI failed to generate a resume."
+    return response.text or "Error: The AI failed to generate a response."
 
 def generate_cover_letter(master_resume_text: str, job_requirements: JobRequirements) -> str:
-    """Writes a compelling cover letter based on the resume and job requirements."""
+    """Writes a highly targeted cover letter based on the master resume and job requirements."""
     prompt = f"""
-    You are an expert career coach and copywriter. 
-    Write a highly compelling, modern cover letter for the job described below, using my Master Resume as the source of truth for my background.
+    You are an expert career coach. Write a persuasive, professional cover letter 
+    for the following job, using my Master Resume as the foundation.
     
-    Guidelines:
-    - Keep it concise (3-4 paragraphs max).
-    - Match the tone of a modern tech/corporate professional.
-    - Explicitly mention the company name and job title.
-    - Highlight 1-2 specific achievements from my resume that prove I can handle their 'Key Responsibilities'.
-    - Do not invent any experience.
-    - Output in clean text/Markdown format.
+    - Keep it to 3 or 4 paragraphs.
+    - Highlight specific achievements from my resume that match their core skills.
+    - Do not invent any fake experience or metrics.
+    - Output in clean Markdown format.
 
     --- JOB REQUIREMENTS ---
     Company: {job_requirements.company_name}
     Title: {job_requirements.job_title}
-    Key Responsibilities: {', '.join(job_requirements.key_responsibilities)}
+    Core Skills: {', '.join(job_requirements.core_skills)}
 
     --- MY MASTER RESUME ---
     {master_resume_text}
@@ -62,60 +60,104 @@ def generate_cover_letter(master_resume_text: str, job_requirements: JobRequirem
     response = client.models.generate_content(model=model_name, contents=prompt)
     return response.text or "Error: The AI failed to generate a cover letter."
 
+
+# --- STREAMLIT USER INTERFACE ---
+
 # 1. Page Setup
-st.set_page_config(page_title="AI Application Agent", page_icon="🎯", layout="centered")
-st.title("🎯 Autonomous Application Agent")
-st.write("Paste a job posting URL and your master resume to generate a hyper-targeted resume and cover letter.")
+st.set_page_config(page_title="AI Resume Tailor", page_icon="🎯", layout="centered")
+st.title("🎯 Autonomous Resume Tailor")
+st.write("Generate a hyper-targeted resume and cover letter in seconds.")
 
-# 2. User Inputs
-job_url = st.text_input("🔗 Job Posting URL", placeholder="https://boards.greenhouse.io/...")
-master_resume = st.text_area("📄 Paste your Master Resume here", height=250, placeholder="Experience, Education, Projects...")
+# 2. Master Resume Input
+master_resume = st.text_area("📄 Paste your Master Resume here", height=200, placeholder="Experience, Education, Projects...")
 
-# 3. The "Run" Button
-if st.button("Generate Application Package", type="primary"):
+st.divider()
+
+# 3. Input Method Toggle (V2.1 Feature)
+st.subheader("🔗 Job Details")
+input_method = st.radio(
+    "How do you want to provide the job description?",
+    ["Paste a URL", "Paste the Text Manually (Best for LinkedIn/Indeed)"]
+)
+
+# Show the correct input box based on the user's choice
+job_url = ""
+job_text = ""
+
+if input_method == "Paste a URL":
+    job_url = st.text_input("Job Posting URL", placeholder="https://boards.greenhouse.io/...")
+else:
+    job_text = st.text_area("Raw Job Description", height=200, placeholder="Copy and paste the full job description text here...")
+
+# 4. The "Run" Button
+if st.button("Tailor My Application", type="primary"):
     
-    if not job_url or not master_resume:
-        st.warning("⚠️ Please provide both a job URL and your master resume!")
-    else:
-        with st.spinner("Scraping job description..."):
+    # Safety check: ensure resume exists
+    if not master_resume:
+        st.warning("⚠️ Please provide your master resume!")
+        st.stop()
+        
+    messy_text = ""
+    
+    # Handle the URL Scraping Route
+    if input_method == "Paste a URL":
+        if not job_url:
+            st.warning("⚠️ Please provide a job URL!")
+            st.stop()
+            
+        with st.spinner("Scraping job description from web..."):
             messy_text = scrape_job_description(job_url)
             
-        with st.spinner("Extracting structured requirements with Gemini..."):
-            clean_requirements: JobRequirements = extract_requirements(messy_text)
-            
-            st.success(f"Found job: **{clean_requirements.job_title}** at **{clean_requirements.company_name}**")
-            with st.expander("🔍 View Extracted Requirements"):
-                st.write(f"**Experience Needed:** {clean_requirements.years_of_experience} years")
-                st.write("**Core Skills:**", ", ".join(clean_requirements.core_skills))
-                
-        with st.spinner("Drafting your custom Resume and Cover Letter..."):
-            # Generate both documents using the exact same extracted data
-            final_resume = generate_tailored_resume(master_resume, clean_requirements)
-            cover_letter = generate_cover_letter(master_resume, clean_requirements)
-            
-        # 4. Display the Final Results in Tabs
-        st.divider()
-        st.subheader("✨ Your Application Package")
+    # Handle the Manual Text Route
+    else:
+        if not job_text:
+            st.warning("⚠️ Please paste the job description text!")
+            st.stop()
+        messy_text = job_text
+
+    # Extract Requirements
+    with st.spinner("Extracting structured requirements with Gemini..."):
+        clean_requirements: JobRequirements = extract_requirements(messy_text)
         
-        # Streamlit tabs make it easy to view multiple documents
-        tab_resume, tab_cover_letter = st.tabs(["📄 Tailored Resume", "✉️ Cover Letter"])
-        
-        # Resume Tab
-        with tab_resume:
-            st.markdown(final_resume)
-            st.download_button(
-                label="Download Resume (.md)",
-                data=final_resume,
-                file_name=f"Resume_{clean_requirements.company_name.replace(' ', '_')}.md",
-                mime="text/markdown"
-            )
+        # --- V2.1 ANTI-BOT DETECTOR ---
+        # If Gemini outputs "Not found", we know the scraper got blocked by a Captcha or 403 error.
+        if clean_requirements.company_name.lower() in ["not found", "unknown"] or clean_requirements.job_title.lower() in ["not found", "unknown"]:
+            st.error("🚨 **Web Scraper Blocked!**")
+            st.write("The website's anti-bot security (like LinkedIn or Indeed) blocked our script from reading the page.")
+            st.info("💡 **Quick Fix:** Switch the toggle above to **'Paste the Text Manually'**, copy the text directly from the job site, and paste it into the box!")
+            st.stop() # Stops the rest of the code from running
             
-        # Cover Letter Tab
-        with tab_cover_letter:
-            st.markdown(cover_letter)
-            st.download_button(
-                label="Download Cover Letter (.md)",
-                data=cover_letter,
-                file_name=f"Cover_Letter_{clean_requirements.company_name.replace(' ', '_')}.md",
-                mime="text/markdown"
-            )
+        # Show the user what we extracted successfully
+        st.success(f"Found job: **{clean_requirements.job_title}** at **{clean_requirements.company_name}**")
+        with st.expander("🔍 View Extracted Requirements"):
+            st.write(f"**Experience Needed:** {clean_requirements.years_of_experience} years")
+            st.write("**Core Skills:**", ", ".join(clean_requirements.core_skills))
+            
+    # Generate Documents
+    with st.spinner("Rewriting your resume and crafting a cover letter..."):
+        final_resume = generate_tailored_resume(master_resume, clean_requirements)
+        final_cover_letter = generate_cover_letter(master_resume, clean_requirements)
+        
+    # 5. Display the Final Results using Tabs
+    st.divider()
+    st.subheader("✨ Your Tailored Application")
+    
+    tab1, tab2 = st.tabs(["📄 Tailored Resume", "✉️ Cover Letter"])
+    
+    with tab1:
+        st.markdown(final_resume)
+        st.download_button(
+            label="Download Resume (.md)",
+            data=final_resume,
+            file_name=f"Resume_{clean_requirements.company_name.replace(' ', '_')}.md",
+            mime="text/markdown"
+        )
+        
+    with tab2:
+        st.markdown(final_cover_letter)
+        st.download_button(
+            label="Download Cover Letter (.md)",
+            data=final_cover_letter,
+            file_name=f"Cover_Letter_{clean_requirements.company_name.replace(' ', '_')}.md",
+            mime="text/markdown"
+        )
