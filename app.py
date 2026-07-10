@@ -13,7 +13,7 @@ from extractor import extract_requirements, JobRequirements
 load_dotenv(override=True)
 client = genai.Client(api_key=os.getenv("GOOGLE_GEMINI_API_KEY"))
 # model_name = os.getenv("GEMINI_TAILOR_MODEL", "gemini-2.5-flash") If you have no limit to this API
-model_name = os.getenv("GEMINI_TAILOR_MODEL", "gemini-2.5-flash-lite")
+model_name = os.getenv("GEMINI_TAILOR_MODEL", "gemini-3.1-flash-lite")
 
 # --- CORE FUNCTIONS ---
 def generate_tailored_resume(master_resume_text: str, job_requirements: JobRequirements) -> str:
